@@ -1,0 +1,28 @@
+from typing import List
+
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+
+        def backtrack(start, target, path):
+            # Base case
+            if target == 0:
+                res.append(path[:])
+                return
+            
+            if target < 0:
+                return
+            
+            # Try all candidates starting from 'start'
+            for i in range(start, len(candidates)):
+                # Choose
+                path.append(candidates[i])
+                
+                # Recurse (same i because we can reuse elements)
+                backtrack(i, target - candidates[i], path)
+                
+                # Backtrack
+                path.pop()
+
+        backtrack(0, target, [])
+        return res
