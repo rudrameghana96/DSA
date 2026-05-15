@@ -1,0 +1,24 @@
+from collections import defaultdict
+
+class Solution:
+    def groupAnagrams(self, strs):
+        anagrams = defaultdict(list)
+
+        for word in strs:
+            # Count frequency of each character
+            count = [0] * 26
+
+            for ch in word:
+                count[ord(ch) - ord('a')] += 1
+
+            # Convert list to tuple so it can be used as dictionary key
+            anagrams[tuple(count)].append(word)
+
+        return list(anagrams.values())
+
+
+# Example Usage
+strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+
+obj = Solution()
+print(obj.groupAnagrams(strs))
