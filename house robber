@@ -1,0 +1,11 @@
+class Solution:
+    def rob(self, nums):
+        prev1 = 0  # Maximum money till previous house
+        prev2 = 0  # Maximum money till house before previous
+
+        for money in nums:
+            curr = max(prev1, prev2 + money)
+            prev2 = prev1
+            prev1 = curr
+
+        return prev1
