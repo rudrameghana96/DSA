@@ -1,0 +1,55 @@
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        def is_palindrome(s, left, right):
+            while left < right:
+                if s[left] != s[right]:
+                    return False
+                left += 1
+                right -= 1
+            return True
+
+        trie = {}
+
+        # Build Trie using reversed words
+        for i, word in enumerate(words):
+            node = trie
+
+            for j in range(len(word) - 1, -1, -1):
+                if is_palindrome(word, 0, j):
+                    node.setdefault("#", []).append(i)
+
+                ch = word[j]
+                if ch not in node:
+                    node[ch] = {}
+
+                node = node[ch]
+
+            node.setdefault("$", -1)
+            node["$"] = i
+            node.setdefault("#", []).append(i)
+
+        ans = []
+
+        # Search each word
+        for i, word in enumerate(words):
+            node = trie
+
+            for j in range(len(word)):
+                # A complete word was found
+                if "$" in node and node["$"] != i:
+                    if is_palindrome(word, j, len(word) - 1):
+                        ans.append([i, node["$"]])
+
+                if word[j] not in node:
+                    break
+
+                node = node[word[j]]
+
+            else:
+                # Remaining part in Trie is palindrome
+                if "#" in node:
+                    for k in node["#"]:
+                        if k != i:
+                            ans.append([i, k])
+
+        return ans
